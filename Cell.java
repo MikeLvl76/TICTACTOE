@@ -6,6 +6,9 @@ public class Cell {
 
     public Cell() {
         this.coords = new int[2];
+        for(int i = 0; i < this.coords.length; i++){
+            this.coords[i] = 0;
+        }
         this.value = '\0';
         this.empty = false;
     }
@@ -20,6 +23,11 @@ public class Cell {
 
     public Boolean isEmpty() {
         return this.empty;
+    }
+
+    public void changeCoords(int i, int j){
+        this.coords[0] = i;
+        this.coords[1] = j;
     }
 
     public void setValue(char _v) {
@@ -40,8 +48,8 @@ public class Cell {
 
     public static void main(String[] args) {
         Cell cell = new Cell();
-        System.out.println(cell.isEmpty());
-        cell.changeState();
-        System.out.println(cell.isEmpty());
+        cell.changeCoords(3, 3);
+        int[] pos = cell.getCoords();
+        System.out.println(String.valueOf(pos[0]) + "-" + String.valueOf(pos[1]));
     }
 }
