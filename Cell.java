@@ -9,7 +9,7 @@ public class Cell {
         for(int i = 0; i < this.coords.length; i++){
             this.coords[i] = 0;
         }
-        this.value = '\0';
+        this.value = '?';
         this.empty = false;
     }
 
@@ -43,7 +43,7 @@ public class Cell {
     }
 
     public String toString(){
-        return "[ " + this.value + " ]";
+        return "(" + String.valueOf(this.coords[0]) + "," + String.valueOf(this.coords[1]) + ") : [ " + this.value + " ]";
     }
 
     public static void main(String[] args) {
