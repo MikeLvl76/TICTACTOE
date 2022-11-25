@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.Objects;
 
 public class Grid {
 
@@ -31,13 +32,36 @@ public class Grid {
         return null;
     }
 
+    public void updateCellValue(Cell cell, char value){
+        if (cell == null) {
+            throw new RuntimeException("Object is null");
+        }
+        if (value != 'X' && value != 'O'){
+            throw new RuntimeException("Incorrect value");
+        }
+        for (int k = 0; k < this.cells.length; k++) {
+            if (Objects.equals(this.cells[k], cell)) {
+                this.cells[k].setValue(value);
+                break;
+            }
+        }
+    }
+
     public String toString() {
         String output = "\n";
         for (int i = 0; i < this.cells.length; i++) {
             if (i % 3 == 0 && i > 0) {
-                output += "\n".repeat(5);
+                output += "\n";
+                for (int j = i - 3; j < i; j++){
+                    output += String.valueOf(this.cells[j]).split(":")[0].trim() + "\t".repeat(2);
+                }
+                output += "\n".repeat(3);
             }
             output += String.valueOf(this.cells[i]).split(":")[1].trim() + "\t".repeat(2);
+        }
+        output += "\n";
+        for (int j = this.cells.length - 3; j < this.cells.length; j++){
+            output += String.valueOf(this.cells[j]).split(":")[0].trim() + "\t".repeat(2);
         }
         output += "\n";
         return output;
