@@ -22,12 +22,26 @@ public class Cell {
         return this.empty;
     }
 
+    public void setValue(char _v) {
+        if (_v != 'X' && _v != 'O'){
+            throw new RuntimeException("Incorrect value");
+        }
+        this.value = _v;
+    }
+
+    public void changeState() {
+        if (this.empty) this.empty = false;
+        else this.empty = true;
+    }
+
     public String toString(){
         return "[ " + this.value + " ]";
     }
 
     public static void main(String[] args) {
         Cell cell = new Cell();
-        System.out.println(cell);
+        System.out.println(cell.isEmpty());
+        cell.changeState();
+        System.out.println(cell.isEmpty());
     }
 }
