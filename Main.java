@@ -131,6 +131,8 @@ public class Main {
         return false;
     }
 
+    
+
     public static Boolean isDraw(Grid grid, Player p1, Player p2) {
         if (isWin(grid, p1, p2))
             return false;
@@ -141,7 +143,7 @@ public class Main {
                 count++;
             }
         }
-        return count == cells.length ? true : false;
+        return count == cells.length;
     }
 
     public static Boolean isWin(Grid grid, Player p1, Player p2) {

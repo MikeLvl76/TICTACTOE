@@ -46,11 +46,4 @@ public class Cell {
     public String toString(){
         return "" + this.value;
     }
-
-    public static void main(String[] args) {
-        Cell cell = new Cell();
-        cell.changeCoords(3, 3);
-        int[] pos = cell.getCoords();
-        System.out.println(String.valueOf(pos[0]) + "-" + String.valueOf(pos[1]));
-    }
 }

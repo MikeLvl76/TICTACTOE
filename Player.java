@@ -44,11 +44,4 @@ public class Player {
     public String toString(){
         return (this.play ? "[Playing] " : "[Idle] ") + this.name.toUpperCase() + " : " + this.symbol;
     }
-
-    public static void main(String[] args) {
-        Player player = new Player("Player", 'X');
-        System.out.println(player);
-        player.changeState();
-        System.out.println(player);
-    }
 }
