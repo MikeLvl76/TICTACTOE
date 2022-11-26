@@ -108,13 +108,17 @@ public class Main {
     public static void end(Grid grid, Player p1, Player p2) {
         if (isWin(grid, p1, p2)) {
             START = false;
-            System.out.println("FINISHED");
+            System.out.println("WINNER");
+        } else if (isDraw(grid, p1, p2)) {
+            START = false;
+            System.out.println("DRAW");
         }
     }
 
     public static Boolean match(ArrayList<String> list) {
         if (list.size() > 2) {
             String[] array = list.toArray(new String[list.size()]);
+            Arrays.sort(array);
             for (String[] row : COMBINATIONS) {
                 if (Arrays.equals(row, array)) {
                     System.out.println(list.toString());
@@ -125,7 +129,19 @@ public class Main {
         return false;
     }
 
-    /* TODO */
+    public static Boolean isDraw(Grid grid, Player p1, Player p2) {
+        if (isWin(grid, p1, p2))
+            return false;
+        Cell[] cells = grid.getCells();
+        int count = 0;
+        for (Cell c : cells) {
+            if (!c.isEmpty()) {
+                count++;
+            }
+        }
+        return count == 9 ? true : false;
+    }
+
     public static Boolean isWin(Grid grid, Player p1, Player p2) {
         Cell[] cells = grid.getCells();
         ArrayList<String> positionsX = new ArrayList<>();
@@ -141,9 +157,6 @@ public class Main {
                 positionsO.add(String.valueOf(coords[0]) + String.valueOf(coords[1]));
             }
         }
-
-        System.out.println("X : " + positionsX.toString());
-        System.out.println("O : " + positionsO.toString());
         return match(positionsX) || match(positionsO);
     }
 
@@ -151,11 +164,6 @@ public class Main {
         Grid grid = new Grid();
         Player p1 = new Player("Player 1", 'X');
         Player p2 = new Player("Player 2", 'O');
-        /*
-         * int[] A = { 1, 2, 3 };
-         * int k = 2;
-         * System.out.println(Combinations.findCombinations(A, k));
-         */
 
         Main.play(grid, p1, p2);
     }
