@@ -3,13 +3,14 @@ public class Cell {
     private int[] coords;
     private char value;
     private Boolean empty;
+    public final static char[] SYMBOLS = {'?', 'X', 'O'};
 
     public Cell() {
         this.coords = new int[2];
         for(int i = 0; i < this.coords.length; i++){
             this.coords[i] = 0;
         }
-        this.value = '?';
+        this.value = SYMBOLS[0];
         this.empty = true;
     }
 
@@ -31,7 +32,7 @@ public class Cell {
     }
 
     public void setValue(char _v) {
-        if (_v != 'X' && _v != 'O'){
+        if (_v != SYMBOLS[1] && _v != SYMBOLS[2]){
             throw new RuntimeException("Incorrect value");
         }
         this.value = _v;

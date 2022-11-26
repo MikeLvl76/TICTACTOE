@@ -36,7 +36,7 @@ public class Grid {
         if (cell == null) {
             throw new RuntimeException("Object is null");
         }
-        if (value != 'X' && value != 'O'){
+        if (value != Cell.SYMBOLS[1] && value != Cell.SYMBOLS[2]){
             throw new RuntimeException("Incorrect value");
         }
         for (int k = 0; k < this.cells.length; k++) {

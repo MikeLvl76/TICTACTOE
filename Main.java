@@ -139,7 +139,7 @@ public class Main {
                 count++;
             }
         }
-        return count == 9 ? true : false;
+        return count == cells.length ? true : false;
     }
 
     public static Boolean isWin(Grid grid, Player p1, Player p2) {
@@ -148,11 +148,11 @@ public class Main {
         ArrayList<String> positionsO = new ArrayList<>();
 
         for (int i = 0; i < cells.length; i++) {
-            if (!cells[i].isEmpty() && cells[i].getValue() == 'X') {
+            if (!cells[i].isEmpty() && cells[i].getValue() == Cell.SYMBOLS[1]) {
                 int[] coords = cells[i].getCoords();
                 positionsX.add(String.valueOf(coords[0]) + String.valueOf(coords[1]));
             }
-            if (!cells[i].isEmpty() && cells[i].getValue() == 'O') {
+            if (!cells[i].isEmpty() && cells[i].getValue() == Cell.SYMBOLS[2]) {
                 int[] coords = cells[i].getCoords();
                 positionsO.add(String.valueOf(coords[0]) + String.valueOf(coords[1]));
             }

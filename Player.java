@@ -5,7 +5,7 @@ public class Player {
     private Boolean play;
 
     public Player(String _n, char _s){
-        if (_s != 'X' && _s != 'O'){
+        if (_s != Cell.SYMBOLS[1] && _s != Cell.SYMBOLS[2]){
             throw new RuntimeException("Incorrect symbol");
         }
         this.name = _n;
@@ -30,7 +30,7 @@ public class Player {
     }
 
     public void setSymbol(char new_symbol){
-        if (new_symbol != 'X' && new_symbol != 'O'){
+        if (new_symbol != Cell.SYMBOLS[1] && new_symbol != Cell.SYMBOLS[2]){
             throw new RuntimeException("Incorrect symbol");
         }
         this.symbol = new_symbol;
