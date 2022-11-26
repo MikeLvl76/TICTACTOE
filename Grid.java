@@ -41,7 +41,12 @@ public class Grid {
         }
         for (int k = 0; k < this.cells.length; k++) {
             if (Objects.equals(this.cells[k], cell)) {
+                if (!this.cells[k].isEmpty()) {
+                    System.out.println("Incorrect cell chosen");
+                    break;
+                }
                 this.cells[k].setValue(value);
+                this.cells[k].changeState();
                 break;
             }
         }

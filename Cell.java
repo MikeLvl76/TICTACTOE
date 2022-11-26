@@ -10,7 +10,7 @@ public class Cell {
             this.coords[i] = 0;
         }
         this.value = '?';
-        this.empty = false;
+        this.empty = true;
     }
 
     public int[] getCoords() {

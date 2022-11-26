@@ -1,9 +1,20 @@
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
 
     public static Boolean START = true;
-    public static Boolean END = false;
+    public final static String[][] COMBINATIONS = {
+            { "00", "01", "02" }, // row 1
+            { "10", "11", "12" }, // row 2
+            { "20", "21", "22" }, // row 3
+            { "00", "10", "20" }, // col 1
+            { "01", "11", "21" }, // col 2
+            { "02", "12", "22" }, // col 3
+            { "00", "11", "22" }, // diag 1
+            { "02", "11", "20" }, // diag 2
+    };
 
     public static void play(Grid grid, Player p1, Player p2) {
         Scanner sc = new Scanner(System.in);
@@ -73,10 +84,12 @@ public class Main {
                     break;
 
                 default:
+                    System.out.println("Wrong location chosen !");
                     break;
             }
 
             switchTurn(p1, p2);
+            end(grid, p1, p2);
         }
         sc.close();
     }
@@ -93,21 +106,57 @@ public class Main {
     }
 
     public static void end(Grid grid, Player p1, Player p2) {
-
+        if (isWin(grid, p1, p2)) {
+            START = false;
+            System.out.println("FINISHED");
+        }
     }
 
-    public static Boolean isWin(Grid grid) {
+    public static Boolean match(ArrayList<String> list) {
+        if (list.size() > 2) {
+            String[] array = list.toArray(new String[list.size()]);
+            for (String[] row : COMBINATIONS) {
+                if (Arrays.equals(row, array)) {
+                    System.out.println(list.toString());
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
-    public static Boolean isDraw(Grid grid) {
-        return false;
+    /* TODO */
+    public static Boolean isWin(Grid grid, Player p1, Player p2) {
+        Cell[] cells = grid.getCells();
+        ArrayList<String> positionsX = new ArrayList<>();
+        ArrayList<String> positionsO = new ArrayList<>();
+
+        for (int i = 0; i < cells.length; i++) {
+            if (!cells[i].isEmpty() && cells[i].getValue() == 'X') {
+                int[] coords = cells[i].getCoords();
+                positionsX.add(String.valueOf(coords[0]) + String.valueOf(coords[1]));
+            }
+            if (!cells[i].isEmpty() && cells[i].getValue() == 'O') {
+                int[] coords = cells[i].getCoords();
+                positionsO.add(String.valueOf(coords[0]) + String.valueOf(coords[1]));
+            }
+        }
+
+        System.out.println("X : " + positionsX.toString());
+        System.out.println("O : " + positionsO.toString());
+        return match(positionsX) || match(positionsO);
     }
 
     public static void main(String[] args) {
         Grid grid = new Grid();
         Player p1 = new Player("Player 1", 'X');
         Player p2 = new Player("Player 2", 'O');
+        /*
+         * int[] A = { 1, 2, 3 };
+         * int k = 2;
+         * System.out.println(Combinations.findCombinations(A, k));
+         */
+
         Main.play(grid, p1, p2);
     }
 
