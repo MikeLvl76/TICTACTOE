@@ -10,7 +10,6 @@ public class Grid {
         for (int i = 0; i < this.cells.length; i++) {
             Cell cell = new Cell();
             cell.changeCoords((int) (i / 3), i % 3);
-            System.out.println(cell);
             this.cells[i] = cell;
         }
     }
@@ -53,28 +52,19 @@ public class Grid {
     }
 
     public String toString() {
-        String output = "\n";
+        String output = "";
         for (int i = 0; i < this.cells.length; i++) {
-            if (i % 3 == 0 && i > 0) {
-                output += "\n";
-                for (int j = i - 3; j < i; j++){
-                    output += String.valueOf(this.cells[j]).split(":")[0].trim() + "\t".repeat(2);
-                }
-                output += "\n".repeat(3);
+            if (i % 3 == 0 && i > 0){
+                output += "\n" + "--- ".repeat(3) + "\n";
             }
-            output += String.valueOf(this.cells[i]).split(":")[1].trim() + "\t".repeat(2);
+            output += (i % 3 == 0 ? " " : "") + this.cells[i] + (i != 2 && i != 5 && i != 8  ? " | " : "");
+            
         }
-        output += "\n";
-        for (int j = this.cells.length - 3; j < this.cells.length; j++){
-            output += String.valueOf(this.cells[j]).split(":")[0].trim() + "\t".repeat(2);
-        }
-        output += "\n";
         return output;
     }
 
     public static void main(String[] args) {
         Grid grid = new Grid();
-        System.out.println(grid.getCellByCoords(1, 2));
         System.out.println(grid);
     }
 }

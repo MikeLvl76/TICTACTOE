@@ -3,7 +3,7 @@ public class Cell {
     private int[] coords;
     private char value;
     private Boolean empty;
-    public final static char[] SYMBOLS = {'?', 'X', 'O'};
+    public final static char[] SYMBOLS = {' ', 'X', 'O'};
 
     public Cell() {
         this.coords = new int[2];
@@ -44,7 +44,7 @@ public class Cell {
     }
 
     public String toString(){
-        return "(" + String.valueOf(this.coords[0]) + "," + String.valueOf(this.coords[1]) + ") : [ " + this.value + " ]";
+        return "" + this.value;
     }
 
     public static void main(String[] args) {

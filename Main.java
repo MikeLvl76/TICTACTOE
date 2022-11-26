@@ -21,18 +21,20 @@ public class Main {
         while (START) {
 
             char symbol = p1.isPlaying() ? p1.getSymbol() : p2.getSymbol();
-            System.out.println(grid);
             System.out.println(
-                    "--- Pick a location ---\n" +
-                            "-> A = (0, 0)\n" +
-                            "-> B = (0, 1)\n" +
-                            "-> C = (0, 2)\n" +
-                            "-> D = (1, 0)\n" +
-                            "-> E = (1, 1)\n" +
-                            "-> F = (1, 2)\n" +
-                            "-> G = (2, 0)\n" +
-                            "-> H = (2, 1)\n" +
-                            "-> I = (2, 2)\n");
+                    "--- Grid model ---\n\n" +
+                            " A | " +
+                            "B | " +
+                            "C\n" + "--- ".repeat(3) + "\n" +
+                            " D | " +
+                            "E | " +
+                            "F\n" + "--- ".repeat(3) + "\n" +
+                            " G | " +
+                            "H | " +
+                            "I\n");
+            System.out.println("--- Grid ---\n\n" + grid);
+            System.out.print("Pick one case by typing its corresponding character : ");
+            
 
             char picked = sc.next().charAt(0);
 
