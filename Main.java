@@ -89,7 +89,6 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         while (START) {
 
-            char symbol = p1.isPlaying() ? p1.getSymbol() : p2.getSymbol();
             System.out.println(
                     "--- Grid model ---\n\n" +
                             " A | " +
@@ -102,8 +101,11 @@ public class Main {
                             "H | " +
                             "I\n");
             System.out.println("--- Grid ---\n\n" + grid + "\n");
+            String name = p1.isPlaying() ? p1.getName() : p2.getName();
+            char symbol = p1.isPlaying() ? p1.getSymbol() : p2.getSymbol();
+            System.out.println(name + " (" + symbol + ") is playing.");
             System.out.println("Type Q to quit.");
-            System.out.print((p1.isPlaying() ? p1.getName() : p2.getName()) + " please pick one case by typing its corresponding character : ");
+            System.out.print("Pick one case by typing its corresponding character : ");
             
 
             char picked = sc.next().charAt(0);
@@ -212,7 +214,15 @@ public class Main {
         Player p1 = new Player("Player 1", 'X');
         Player p2 = new Player("Player 2", 'O');
 
-        Main.playIAvsIA(grid, p1, p2);
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Choose a mode:");
+        System.out.println("\t1. IA vs IA");
+        System.out.println("\t2. Player vs Player");
+
+        if (sc.nextInt() == 1) Main.playPVP(grid, p1, p2);
+        else Main.playIAvsIA(grid, p1, p2);
+
+        sc.close();
     }
 
 }
