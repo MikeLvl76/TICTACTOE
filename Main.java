@@ -148,7 +148,7 @@ public class Main {
     
 
     public static Boolean isDraw(Grid grid, Player p1, Player p2) {
-        return isWin(grid, p1, p2) && grid.getCells().stream().allMatch((cell) -> !cell.isEmpty());
+        return !isWin(grid, p1, p2) && grid.getCells().stream().allMatch((cell) -> !cell.isEmpty());
     }
 
     public static Boolean isWin(Grid grid, Player p1, Player p2) {
