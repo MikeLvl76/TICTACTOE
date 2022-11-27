@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -16,7 +18,15 @@ public class Main {
             { "02", "11", "20" }, // diag 2
     };
 
+    public static String winner = "";
+
+    public static void startFirst(Player p1, Player p2) {
+        if (Math.random() < 0.5) p1.changeState();
+        else p2.changeState();
+    }
+
     public static void play(Grid grid, Player p1, Player p2) {
+        startFirst(p1, p2);
         Scanner sc = new Scanner(System.in);
         while (START) {
 
@@ -32,8 +42,9 @@ public class Main {
                             " G | " +
                             "H | " +
                             "I\n");
-            System.out.println("--- Grid ---\n\n" + grid);
-            System.out.print("Pick one case by typing its corresponding character : ");
+            System.out.println("--- Grid ---\n\n" + grid + "\n");
+            System.out.println("Type Q to quit.");
+            System.out.print((p1.isPlaying() ? p1.getName() : p2.getName()) + " please pick one case by typing its corresponding character : ");
             
 
             char picked = sc.next().charAt(0);
@@ -85,6 +96,10 @@ public class Main {
                     grid.updateCellValue(cellI, symbol);
                     break;
 
+                case 'Q':
+                    System.exit(0);
+                    break;
+
                 default:
                     System.out.println("Wrong location chosen !");
                     break;
@@ -110,7 +125,7 @@ public class Main {
     public static void end(Grid grid, Player p1, Player p2) {
         if (isWin(grid, p1, p2)) {
             START = false;
-            System.out.println("WINNER");
+            System.out.println("The winner is : " + winner.toUpperCase());
         } else if (isDraw(grid, p1, p2)) {
             START = false;
             System.out.println("DRAW");
@@ -119,13 +134,11 @@ public class Main {
 
     public static Boolean match(ArrayList<String> list) {
         if (list.size() > 2) {
-            String[] array = list.toArray(new String[list.size()]);
-            Arrays.sort(array);
+            Collections.sort(list);
+            System.out.println(list.toString());
             for (String[] row : COMBINATIONS) {
-                if (Arrays.equals(row, array)) {
-                    System.out.println(list.toString());
-                    return true;
-                }
+                List<String> rowList = Arrays.asList(row);
+                if(list.containsAll(rowList)) return true;
             }
         }
         return false;
@@ -161,7 +174,16 @@ public class Main {
                 positionsO.add(String.valueOf(coords[0]) + String.valueOf(coords[1]));
             }
         }
-        return match(positionsX) || match(positionsO);
+        if (match(positionsX)) {
+            winner = p1.getSymbol() == Cell.SYMBOLS[1] ? p1.getName() : p2.getName();
+            return true;
+        }
+
+        if (match(positionsO)) {
+            winner = p1.getSymbol() == Cell.SYMBOLS[2] ? p1.getName() : p2.getName();
+            return true;
+        }
+        return false;
     }
 
     public static void main(String[] args) {
