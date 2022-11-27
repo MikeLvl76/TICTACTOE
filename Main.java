@@ -127,9 +127,11 @@ public class Main {
             }
             System.out.println("--- Grid ---\n\n" + grid + "\n");
             System.out.println("List of available moves : " + inputs.toString());
-            System.out.println((p1.isPlaying() ? p1.getName() : p2.getName()) + " is playing.");
+            String name = p1.isPlaying() ? p1.getName() : p2.getName();
             char symbol = p1.isPlaying() ? p1.getSymbol() : p2.getSymbol();
-            char picked = inputs.get(new Random().nextInt(inputs.size() - 1));
+            System.out.println(name + " (" + symbol + ") is playing.");
+            char picked = inputs.size() > 1 ? inputs.get(new Random().nextInt(inputs.size() - 1)) : inputs.get(0);
+            System.out.println(name + " has chosen " + picked);
             inputs.remove(inputs.indexOf(picked));
 
             saveInput(grid, picked, symbol);
