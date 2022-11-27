@@ -125,9 +125,11 @@ public class Main {
     public static void end(Grid grid, Player p1, Player p2) {
         if (isWin(grid, p1, p2)) {
             START = false;
+            System.out.println("Result :\n" + grid);
             System.out.println("The winner is : " + winner.toUpperCase());
         } else if (isDraw(grid, p1, p2)) {
             START = false;
+            System.out.println("Result :\n" + grid);
             System.out.println("DRAW");
         }
     }
@@ -135,7 +137,6 @@ public class Main {
     public static Boolean match(ArrayList<String> list) {
         if (list.size() > 2) {
             Collections.sort(list);
-            System.out.println(list.toString());
             for (String[] row : COMBINATIONS) {
                 List<String> rowList = Arrays.asList(row);
                 if(list.containsAll(rowList)) return true;
@@ -147,30 +148,22 @@ public class Main {
     
 
     public static Boolean isDraw(Grid grid, Player p1, Player p2) {
-        if (isWin(grid, p1, p2))
-            return false;
-        Cell[] cells = grid.getCells();
-        int count = 0;
-        for (Cell c : cells) {
-            if (!c.isEmpty()) {
-                count++;
-            }
-        }
-        return count == cells.length;
+        return isWin(grid, p1, p2) && grid.getCells().stream().allMatch((cell) -> !cell.isEmpty());
     }
 
     public static Boolean isWin(Grid grid, Player p1, Player p2) {
-        Cell[] cells = grid.getCells();
+        ArrayList<Cell> cells = grid.getCells();
         ArrayList<String> positionsX = new ArrayList<>();
         ArrayList<String> positionsO = new ArrayList<>();
 
-        for (int i = 0; i < cells.length; i++) {
-            if (!cells[i].isEmpty() && cells[i].getValue() == Cell.SYMBOLS[1]) {
-                int[] coords = cells[i].getCoords();
+        for (int i = 0; i < cells.size(); i++) {
+
+            if (!cells.get(i).isEmpty() && cells.get(i).getValue() == Cell.SYMBOLS[1]) {
+                int[] coords = cells.get(i).getCoords();
                 positionsX.add(String.valueOf(coords[0]) + String.valueOf(coords[1]));
             }
-            if (!cells[i].isEmpty() && cells[i].getValue() == Cell.SYMBOLS[2]) {
-                int[] coords = cells[i].getCoords();
+            if (!cells.get(i).isEmpty() && cells.get(i).getValue() == Cell.SYMBOLS[2]) {
+                int[] coords = cells.get(i).getCoords();
                 positionsO.add(String.valueOf(coords[0]) + String.valueOf(coords[1]));
             }
         }

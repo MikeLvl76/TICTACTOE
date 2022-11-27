@@ -1,20 +1,21 @@
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
 public class Grid {
 
-    private Cell[] cells;
+    private ArrayList<Cell> cells;
 
     public Grid() {
-        this.cells = new Cell[9];
-        for (int i = 0; i < this.cells.length; i++) {
+        this.cells = new ArrayList<>();
+        for (int i = 0; i < 9; i++) {
             Cell cell = new Cell();
             cell.changeCoords((int) (i / 3), i % 3);
-            this.cells[i] = cell;
+            this.cells.add(cell);
         }
     }
 
-    public Cell[] getCells() {
+    public ArrayList<Cell> getCells() {
         return this.cells;
     }
 
@@ -23,9 +24,9 @@ public class Grid {
             throw new RuntimeException("Incorrect index");
         }
         int[] coords = { i, j };
-        for (int k = 0; k < this.cells.length; k++) {
-            if (Arrays.equals(this.cells[k].getCoords(), coords)) {
-                return this.cells[k];
+        for (int k = 0; k < this.cells.size(); k++) {
+            if (Arrays.equals(this.cells.get(k).getCoords(), coords)) {
+                return this.cells.get(k);
             }
         }
         return null;
@@ -38,14 +39,14 @@ public class Grid {
         if (value != Cell.SYMBOLS[1] && value != Cell.SYMBOLS[2]){
             throw new RuntimeException("Incorrect value");
         }
-        for (int k = 0; k < this.cells.length; k++) {
-            if (Objects.equals(this.cells[k], cell)) {
-                if (!this.cells[k].isEmpty()) {
+        for (int k = 0; k < this.cells.size(); k++) {
+            if (Objects.equals(this.cells.get(k), cell)) {
+                if (!this.cells.get(k).isEmpty()) {
                     System.out.println("Incorrect cell chosen");
                     break;
                 }
-                this.cells[k].setValue(value);
-                this.cells[k].changeState();
+                this.cells.get(k).setValue(value);
+                this.cells.get(k).changeState();
                 break;
             }
         }
@@ -53,11 +54,11 @@ public class Grid {
 
     public String toString() {
         String output = "";
-        for (int i = 0; i < this.cells.length; i++) {
+        for (int i = 0; i < this.cells.size(); i++) {
             if (i % 3 == 0 && i > 0){
                 output += "\n" + "--- ".repeat(3) + "\n";
             }
-            output += (i % 3 == 0 ? " " : "") + this.cells[i] + (i != 2 && i != 5 && i != 8  ? " | " : "");
+            output += (i % 3 == 0 ? " " : "") + this.cells.get(i) + (i != 2 && i != 5 && i != 8  ? " | " : "");
             
         }
         return output;
