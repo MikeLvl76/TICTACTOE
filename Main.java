@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
@@ -25,7 +26,65 @@ public class Main {
         else p2.changeState();
     }
 
-    public static void play(Grid grid, Player p1, Player p2) {
+    public static void saveInput(Grid grid, char picked, char symbol) {
+        switch (picked) {
+
+            case 'A':
+                Cell cellA = grid.getCellByCoords(0, 0);
+                grid.updateCellValue(cellA, symbol);
+                break;
+
+            case 'B':
+                Cell cellB = grid.getCellByCoords(0, 1);
+                grid.updateCellValue(cellB, symbol);
+                break;
+
+            case 'C':
+                Cell cellC = grid.getCellByCoords(0, 2);
+                grid.updateCellValue(cellC, symbol);
+                break;
+
+            case 'D':
+                Cell cellD = grid.getCellByCoords(1, 0);
+                grid.updateCellValue(cellD, symbol);
+                break;
+
+            case 'E':
+                Cell cellE = grid.getCellByCoords(1, 1);
+                grid.updateCellValue(cellE, symbol);
+                break;
+
+            case 'F':
+                Cell cellF = grid.getCellByCoords(1, 2);
+                grid.updateCellValue(cellF, symbol);
+                break;
+
+            case 'G':
+                Cell cellG = grid.getCellByCoords(2, 0);
+                grid.updateCellValue(cellG, symbol);
+                break;
+
+            case 'H':
+                Cell cellH = grid.getCellByCoords(2, 1);
+                grid.updateCellValue(cellH, symbol);
+                break;
+
+            case 'I':
+                Cell cellI = grid.getCellByCoords(2, 2);
+                grid.updateCellValue(cellI, symbol);
+                break;
+
+            case 'Q':
+                System.exit(0);
+                break;
+
+            default:
+                System.out.println("Wrong location chosen !");
+                break;
+        }
+    }
+
+    public static void playPVP(Grid grid, Player p1, Player p2) {
         startFirst(p1, p2);
         Scanner sc = new Scanner(System.in);
         while (START) {
@@ -49,62 +108,31 @@ public class Main {
 
             char picked = sc.next().charAt(0);
 
-            switch (picked) {
+            saveInput(grid, picked, symbol);
+            switchTurn(p1, p2);
+            end(grid, p1, p2);
+        }
+        sc.close();
+    }
 
-                case 'A':
-                    Cell cellA = grid.getCellByCoords(0, 0);
-                    grid.updateCellValue(cellA, symbol);
-                    break;
-
-                case 'B':
-                    Cell cellB = grid.getCellByCoords(0, 1);
-                    grid.updateCellValue(cellB, symbol);
-                    break;
-
-                case 'C':
-                    Cell cellC = grid.getCellByCoords(0, 2);
-                    grid.updateCellValue(cellC, symbol);
-                    break;
-
-                case 'D':
-                    Cell cellD = grid.getCellByCoords(1, 0);
-                    grid.updateCellValue(cellD, symbol);
-                    break;
-
-                case 'E':
-                    Cell cellE = grid.getCellByCoords(1, 1);
-                    grid.updateCellValue(cellE, symbol);
-                    break;
-
-                case 'F':
-                    Cell cellF = grid.getCellByCoords(1, 2);
-                    grid.updateCellValue(cellF, symbol);
-                    break;
-
-                case 'G':
-                    Cell cellG = grid.getCellByCoords(2, 0);
-                    grid.updateCellValue(cellG, symbol);
-                    break;
-
-                case 'H':
-                    Cell cellH = grid.getCellByCoords(2, 1);
-                    grid.updateCellValue(cellH, symbol);
-                    break;
-
-                case 'I':
-                    Cell cellI = grid.getCellByCoords(2, 2);
-                    grid.updateCellValue(cellI, symbol);
-                    break;
-
-                case 'Q':
-                    System.exit(0);
-                    break;
-
-                default:
-                    System.out.println("Wrong location chosen !");
-                    break;
+    public static void playIAvsIA(Grid grid, Player p1, Player p2) {
+        startFirst(p1, p2);
+        ArrayList<Character> inputs = new ArrayList<>(Arrays.asList('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'));
+        Scanner sc = new Scanner(System.in);
+        while (START) {
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
+            System.out.println("--- Grid ---\n\n" + grid + "\n");
+            System.out.println("List of available moves : " + inputs.toString());
+            System.out.println((p1.isPlaying() ? p1.getName() : p2.getName()) + " is playing.");
+            char symbol = p1.isPlaying() ? p1.getSymbol() : p2.getSymbol();
+            char picked = inputs.get(new Random().nextInt(inputs.size() - 1));
+            inputs.remove(inputs.indexOf(picked));
 
+            saveInput(grid, picked, symbol);
             switchTurn(p1, p2);
             end(grid, p1, p2);
         }
@@ -145,8 +173,6 @@ public class Main {
         return false;
     }
 
-    
-
     public static Boolean isDraw(Grid grid, Player p1, Player p2) {
         return !isWin(grid, p1, p2) && grid.getCells().stream().allMatch((cell) -> !cell.isEmpty());
     }
@@ -184,7 +210,7 @@ public class Main {
         Player p1 = new Player("Player 1", 'X');
         Player p2 = new Player("Player 2", 'O');
 
-        Main.play(grid, p1, p2);
+        Main.playIAvsIA(grid, p1, p2);
     }
 
 }
