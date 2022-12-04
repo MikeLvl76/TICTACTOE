@@ -22,66 +22,30 @@ public class Main {
     public static String winner = "";
 
     public static void startFirst(Player p1, Player p2) {
-        if (Math.random() < 0.5) p1.changeState();
-        else p2.changeState();
+        if (Math.random() < 0.5)
+            p1.changeState();
+        else
+            p2.changeState();
     }
 
-    public static void saveInput(Grid grid, char picked, char symbol) {
-        switch (picked) {
+    public static void saveInput(Grid grid, String picked, char symbol) {
 
-            case 'A':
-                Cell cellA = grid.getCellByCoords(0, 0);
-                grid.updateCellValue(cellA, symbol);
-                break;
+        if (picked.equals("Quit"))
+            System.exit(0);
 
-            case 'B':
-                Cell cellB = grid.getCellByCoords(0, 1);
-                grid.updateCellValue(cellB, symbol);
-                break;
+        int i = Integer.parseInt(Character.toString(picked.charAt(0)));
+        int j = Integer.parseInt(Character.toString(picked.charAt(1)));
 
-            case 'C':
-                Cell cellC = grid.getCellByCoords(0, 2);
-                grid.updateCellValue(cellC, symbol);
-                break;
-
-            case 'D':
-                Cell cellD = grid.getCellByCoords(1, 0);
-                grid.updateCellValue(cellD, symbol);
-                break;
-
-            case 'E':
-                Cell cellE = grid.getCellByCoords(1, 1);
-                grid.updateCellValue(cellE, symbol);
-                break;
-
-            case 'F':
-                Cell cellF = grid.getCellByCoords(1, 2);
-                grid.updateCellValue(cellF, symbol);
-                break;
-
-            case 'G':
-                Cell cellG = grid.getCellByCoords(2, 0);
-                grid.updateCellValue(cellG, symbol);
-                break;
-
-            case 'H':
-                Cell cellH = grid.getCellByCoords(2, 1);
-                grid.updateCellValue(cellH, symbol);
-                break;
-
-            case 'I':
-                Cell cellI = grid.getCellByCoords(2, 2);
-                grid.updateCellValue(cellI, symbol);
-                break;
-
-            case 'Q':
-                System.exit(0);
-                break;
-
-            default:
-                System.out.println("Wrong location chosen !");
-                break;
+        if (i > 2 || j > 2) {
+            System.out.println("Out of bounds !");
+        } else if (i < 0 || j < 0) {
+            System.out.println("Negative indices not supported !");
+        } else {
+            Cell cell = grid.getCellByCoords(i, j);
+            grid.updateCellValue(cell, symbol);
+            return;
         }
+
     }
 
     public static void playPVP(Grid grid, Player p1, Player p2) {
@@ -91,26 +55,23 @@ public class Main {
 
             System.out.println(
                     "--- Grid model ---\n\n" +
-                            " A | " +
-                            "B | " +
-                            "C\n" + "--- ".repeat(3) + "\n" +
-                            " D | " +
-                            "E | " +
-                            "F\n" + "--- ".repeat(3) + "\n" +
-                            " G | " +
-                            "H | " +
-                            "I\n");
+                            " 00 | " +
+                            "01 | " +
+                            "02\n" + "--- ".repeat(3) + "\n" +
+                            " 10 | " +
+                            "11 | " +
+                            "12\n" + "--- ".repeat(3) + "\n" +
+                            " 20 | " +
+                            "21 | " +
+                            "22\n");
             System.out.println("--- Grid ---\n\n" + grid + "\n");
             String name = p1.isPlaying() ? p1.getName() : p2.getName();
             char symbol = p1.isPlaying() ? p1.getSymbol() : p2.getSymbol();
             System.out.println(name + " (" + symbol + ") is playing.");
-            System.out.println("Type Q to quit.");
+            System.out.println("Type Quit to quit.");
             System.out.print("Pick one case by typing its corresponding character : ");
-            
 
-            char picked = sc.next().charAt(0);
-
-            saveInput(grid, picked, symbol);
+            saveInput(grid, sc.next(), symbol);
             switchTurn(p1, p2);
             end(grid, p1, p2);
         }
@@ -119,7 +80,7 @@ public class Main {
 
     public static void playIAvsIA(Grid grid, Player p1, Player p2) {
         startFirst(p1, p2);
-        ArrayList<Character> inputs = new ArrayList<>(Arrays.asList('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'));
+        ArrayList<String> inputs = new ArrayList<>(Arrays.asList("00", "01", "02", "10", "11", "12", "20", "21", "23"));
         Scanner sc = new Scanner(System.in);
         while (START) {
             try {
@@ -132,7 +93,7 @@ public class Main {
             String name = p1.isPlaying() ? p1.getName() : p2.getName();
             char symbol = p1.isPlaying() ? p1.getSymbol() : p2.getSymbol();
             System.out.println(name + " (" + symbol + ") is playing.");
-            char picked = inputs.size() > 1 ? inputs.get(new Random().nextInt(inputs.size() - 1)) : inputs.get(0);
+            String picked = inputs.size() > 1 ? inputs.get(new Random().nextInt(inputs.size() - 1)) : inputs.get(0);
             System.out.println(name + " has chosen " + picked);
             inputs.remove(inputs.indexOf(picked));
 
@@ -171,7 +132,8 @@ public class Main {
             Collections.sort(list);
             for (String[] row : COMBINATIONS) {
                 List<String> rowList = Arrays.asList(row);
-                if(list.containsAll(rowList)) return true;
+                if (list.containsAll(rowList))
+                    return true;
             }
         }
         return false;
@@ -219,8 +181,10 @@ public class Main {
         System.out.println("\t1. IA vs IA");
         System.out.println("\t2. Player vs Player");
 
-        if (sc.nextInt() == 1) Main.playPVP(grid, p1, p2);
-        else Main.playIAvsIA(grid, p1, p2);
+        if (sc.nextInt() == 1)
+            Main.playIAvsIA(grid, p1, p2);
+        else
+            Main.playPVP(grid, p1, p2);
 
         sc.close();
     }
