@@ -1,3 +1,4 @@
+
 public class Cell {
 
     private int[] coords;
@@ -5,6 +6,9 @@ public class Cell {
     private Boolean empty;
     public final static char[] SYMBOLS = {' ', 'X', 'O'};
 
+    /**
+     * Cell default constructor, initializes coords, value and is empty
+     */
     public Cell() {
         this.coords = new int[2];
         for(int i = 0; i < this.coords.length; i++){
@@ -14,23 +18,44 @@ public class Cell {
         this.empty = true;
     }
 
+    /**
+     * Gets Cell coordinates
+     * @return int[] coordinates as integer array
+     */
     public int[] getCoords() {
         return this.coords;
     }
 
+    /**
+     * Gets Cell value inside
+     * @return char value is represented by a char
+     */
     public char getValue() {
         return this.value;
     }
 
+    /**
+     * Returns Cell status : empty or not
+     * @return boolean cell status represented by a boolean value
+     */
     public Boolean isEmpty() {
         return this.empty;
     }
 
+    /**
+     * Updates Cell coords with integer params
+     * @param i row index
+     * @param j column index
+     */
     public void changeCoords(int i, int j){
         this.coords[0] = i;
         this.coords[1] = j;
     }
 
+    /**
+     * Sets Cell value by replacing the old.
+     * @param _v new value to insert in Cell, the char value must be equal to one of SYMBOLS value
+     */
     public void setValue(char _v) {
         if (_v != SYMBOLS[1] && _v != SYMBOLS[2]){
             throw new RuntimeException("Incorrect value");
@@ -38,11 +63,18 @@ public class Cell {
         this.value = _v;
     }
 
+    /**
+     * Changes Cell state : if it was empty then it's full and vice-versa
+     */
     public void changeState() {
         if (this.empty) this.empty = false;
         else this.empty = true;
     }
 
+    /**
+     * Returns Cell representation as String
+     * @return String displayed value when printing Cell object
+     */
     public String toString(){
         return "" + this.value;
     }

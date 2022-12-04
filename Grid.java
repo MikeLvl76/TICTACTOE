@@ -1,3 +1,4 @@
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
@@ -6,6 +7,9 @@ public class Grid {
 
     private ArrayList<Cell> cells;
 
+    /**
+     * Grid default constructor, initializes Cell list and Cell coordinates
+     */
     public Grid() {
         this.cells = new ArrayList<>();
         for (int i = 0; i < 9; i++) {
@@ -15,10 +19,20 @@ public class Grid {
         }
     }
 
+    /**
+     * Returns list of Cell
+     * @return ArrayList<Cell> a list containing Cell object
+     */
     public ArrayList<Cell> getCells() {
         return this.cells;
     }
 
+    /**
+     * Returns Cell at given coordinates
+     * @param i row index
+     * @param j column index
+     * @return Cell object at the given indices
+     */
     public Cell getCellByCoords(int i, int j) {
         if (i > 2 || j > 2) {
             throw new RuntimeException("Incorrect index");
@@ -32,6 +46,11 @@ public class Grid {
         return null;
     }
 
+    /**
+     * Updates Cell object value
+     * @param cell Cell object to be updated
+     * @param value char value to insert
+     */
     public void updateCellValue(Cell cell, char value){
         if (cell == null) {
             throw new RuntimeException("Object is null");
@@ -52,6 +71,10 @@ public class Grid {
         }
     }
 
+    /**
+     * Returns Grid representation as String
+     * @return String displayed value when printing Grid object
+     */
     public String toString() {
         String output = "";
         for (int i = 0; i < this.cells.size(); i++) {
