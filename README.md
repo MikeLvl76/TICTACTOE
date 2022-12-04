@@ -11,8 +11,9 @@ java Main
 
 Or use an IDE to avoid typing those.
 
-There are two modes :
+There are 3 modes :
 - Player vs Player
 - IA vs IA
+- Player vs IA
 
-For the second players chose randomly and there is no learning from previous games. It will be improved soon.
+When IA has to play there is no learning and it's a basic random choice. It will be improved soon.
