@@ -34,9 +34,6 @@ public class Grid {
      * @return Cell object at the given indices
      */
     public Cell getCellByCoords(int i, int j) {
-        if (i > 2 || j > 2) {
-            throw new RuntimeException("Incorrect index");
-        }
         int[] coords = { i, j };
         for (int k = 0; k < this.cells.size(); k++) {
             if (Arrays.equals(this.cells.get(k).getCoords(), coords)) {

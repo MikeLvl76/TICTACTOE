@@ -3,7 +3,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
@@ -98,13 +97,13 @@ public class Main {
             char symbol = '\0';
 
             if (ia_1.isPlaying()) {
-                System.out.println(ia_1.getName() + " ( " + ia_1.getSymbol() + " ) is playing.");
+                System.out.println(ia_1.getName() + " (" + ia_1.getSymbol() + ") is playing.");
                 symbol = ia_1.getSymbol();
                 choice = ia_1.randomMove(moves);
                 moves.remove(choice);
                 System.out.println(ia_1.getName() + " has picked : " + choice);
             } else {
-                System.out.println(ia_2.getName() + " ( " + ia_2.getSymbol() + " ) is playing.");
+                System.out.println(ia_2.getName() + " (" + ia_2.getSymbol() + ") is playing.");
                 symbol = ia_2.getSymbol();
                 choice = ia_2.randomMove(moves);
                 moves.remove(choice);
@@ -118,54 +117,43 @@ public class Main {
         }
     }
 
-    public static void playPlayerVsIA(Grid grid, Player p1, Player p2) {
-        startFirst(p1, p2);
-        ArrayList<String> inputs = new ArrayList<>(Arrays.asList("00", "01", "02", "10", "11", "12", "20", "21", "22"));
+    public static void playPlayerVsIA(Grid grid, Player p) {
+        IA ia = new IA("BOT", p.getSymbol() == 'X' ? 'O': 'X');
+        startFirst(p, ia);
+        ArrayList<String> moves = new ArrayList<>(Arrays.asList("00", "01", "02", "10", "11", "12", "20", "21", "22"));
+        System.out.println("--- Grid ---\n\n" + grid + "\n");
         Scanner sc = new Scanner(System.in);
 
         while (START) {
-            System.out.println(
-                    "--- Grid model ---\n\n" +
-                            " 00 | " +
-                            "01 | " +
-                            "02\n" + "--- ".repeat(3) + "\n" +
-                            " 10 | " +
-                            "11 | " +
-                            "12\n" + "--- ".repeat(3) + "\n" +
-                            " 20 | " +
-                            "21 | " +
-                            "22\n");
 
-            System.out.println("--- Grid ---\n\n" + grid + "\n");
-            String name = p1.isPlaying() ? p1.getName() : p2.getName();
-            char symbol = p1.isPlaying() ? p1.getSymbol() : p2.getSymbol();
-            System.out.println(name + " (" + symbol + ") is playing.");
+            String choice = "";
+            char symbol = '\0';
 
-            if (p2.isPlaying()) {
-
-                System.out.println("List of available moves : " + inputs.toString());
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                String picked = inputs.get(new Random().nextInt(inputs.size()));
-                System.out.println(name + " has chosen " + picked);
-                inputs.remove(inputs.indexOf(picked));
-                saveInput(grid, picked, symbol);
-
-            } else {
-
-                System.out.println("Type Quit to quit.");
-                System.out.print("Pick one case by typing its corresponding character : ");
-                String picked = sc.next();
-                saveInput(grid, picked, symbol);
-                inputs.remove(inputs.indexOf(picked));
-
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
 
-            switchTurn(p1, p2);
-            end(grid, p1, p2);
+            if (p.isPlaying()) {
+                System.out.println(p.getName() + " (" + p.getSymbol() + ") is playing.");
+                symbol = p.getSymbol();
+                System.out.print("Make your choice : ");
+                choice = sc.next();
+                moves.remove(choice);
+                System.out.println(p.getName() + " has picked : " + choice);
+            } else {
+                System.out.println(ia.getName() + " (" + ia.getSymbol() + ") is playing.");
+                symbol = ia.getSymbol();
+                choice = ia.randomMove(moves);
+                moves.remove(choice);
+                System.out.println(ia.getName() + " has picked : " + choice);
+            }
+
+            saveInput(grid, choice, symbol);
+            System.out.println("--- Grid ---\n\n" + grid + "\n");
+            switchTurn(p, ia);
+            end(grid, p, ia);
         }
         sc.close();
     }
@@ -254,7 +242,7 @@ public class Main {
                 break;
 
             case 3:
-                playPlayerVsIA(grid, p1, p2);
+                playPlayerVsIA(grid, p1);
                 break;
 
             default:
