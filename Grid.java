@@ -70,14 +70,13 @@ public class Grid {
 
     @Override
     public String toString() {
-        String output = "";
+        StringBuilder builder = new StringBuilder();
         for (int i = 0; i < this.cells.size(); i++) {
             if (i % 3 == 0 && i > 0){
-                output += "\n" + "--- ".repeat(3) + "\n";
+                builder.append("\n").append("--- ".repeat(3)).append("\n");
             }
-            output += (i % 3 == 0 ? " " : "") + this.cells.get(i) + (i != 2 && i != 5 && i != 8  ? " | " : "");
-            
+            builder.append((i % 3 == 0 ? " " : "")).append(this.cells.get(i)).append((i != 2 && i != 5 && i != 8  ? " | " : ""));
         }
-        return output;
+        return builder.toString();
     }
 }
