@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.Random;
 
 public class IA extends Player{
@@ -7,8 +6,8 @@ public class IA extends Player{
         super(_n, _s);
     }
 
-    public void randomMove(ArrayList<String> moves) {
-        this.saveMove(moves.get(new Random().nextInt(moves.size())));
+    public void randomMove() {
+        this.saveMove(this.moves.get(new Random().nextInt(this.moves.size())));
     }
     
 }

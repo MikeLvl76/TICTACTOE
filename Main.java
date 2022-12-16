@@ -122,7 +122,7 @@ public class Main {
             System.out.println(getPlayerInfo(p));
             System.out.println("Possible moves : " + p.getMoves().toString());
 
-            p.randomMove(p.getMoves());
+            p.randomMove();
             System.out.println("Chosen move : " + p.getCurrentMove());
             if (p1.isPlaying())
                 p2.deleteMove(p.getCurrentMove());
@@ -171,7 +171,7 @@ public class Main {
                 System.out.println(getPlayerInfo(ia));
                 System.out.println("Possible moves : " + ia.getMoves().toString());
 
-                ia.randomMove(ia.getMoves());
+                ia.randomMove();
                 System.out.println("Chosen move : " + ia.getCurrentMove());
                 p.deleteMove(ia.getCurrentMove());
                 saveInput(grid, ia);
