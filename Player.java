@@ -11,7 +11,7 @@ public class Player {
      * @param _s char value to insert in symbol attribute
      */
     public Player(String _n, char _s){
-        if (_s != Cell.SYMBOLS[1] && _s != Cell.SYMBOLS[2]){
+        if (!Symbol.isInEnum(_s)){
             throw new RuntimeException("Incorrect symbol");
         }
         this.name = _n;
@@ -56,7 +56,7 @@ public class Player {
      * @param new_symbol char value to insert for updating symbol attribute
      */
     public void setSymbol(char new_symbol){
-        if (new_symbol != Cell.SYMBOLS[1] && new_symbol != Cell.SYMBOLS[2]){
+        if (!Symbol.isInEnum(new_symbol)){
             throw new RuntimeException("Incorrect symbol");
         }
         this.symbol = new_symbol;

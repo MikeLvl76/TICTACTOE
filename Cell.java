@@ -4,7 +4,6 @@ public class Cell {
     private int[] coords;
     private char value;
     private Boolean empty;
-    public final static char[] SYMBOLS = {' ', 'X', 'O'};
 
     /**
      * Cell default constructor, initializes coords, value and is empty
@@ -14,7 +13,7 @@ public class Cell {
         for(int i = 0; i < this.coords.length; i++){
             this.coords[i] = 0;
         }
-        this.value = SYMBOLS[0];
+        this.value = Symbol.WHITESPACE.getValue();
         this.empty = true;
     }
 
@@ -54,10 +53,10 @@ public class Cell {
 
     /**
      * Sets Cell value by replacing the old.
-     * @param _v new value to insert in Cell, the char value must be equal to one of SYMBOLS value
+     * @param _v new value to insert in Cell, the char value must be equal to one of Enum values
      */
     public void setValue(char _v) {
-        if (_v != SYMBOLS[1] && _v != SYMBOLS[2]){
+        if (!Symbol.isInEnum(_v)){
             throw new RuntimeException("Incorrect value");
         }
         this.value = _v;

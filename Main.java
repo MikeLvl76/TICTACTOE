@@ -245,22 +245,22 @@ public class Main {
 
         for (int i = 0; i < cells.size(); i++) {
 
-            if (!cells.get(i).isEmpty() && cells.get(i).getValue() == Cell.SYMBOLS[1]) {
+            if (!cells.get(i).isEmpty() && cells.get(i).getValue() == Symbol.X.getValue()) {
                 int[] coords = cells.get(i).getCoords();
                 positionsX.add(String.valueOf(coords[0]) + String.valueOf(coords[1]));
             }
-            if (!cells.get(i).isEmpty() && cells.get(i).getValue() == Cell.SYMBOLS[2]) {
+            if (!cells.get(i).isEmpty() && cells.get(i).getValue() == Symbol.O.getValue()) {
                 int[] coords = cells.get(i).getCoords();
                 positionsO.add(String.valueOf(coords[0]) + String.valueOf(coords[1]));
             }
         }
         if (match(positionsX)) {
-            winner = p1.getSymbol() == Cell.SYMBOLS[1] ? p1.getName() : p2.getName();
+            winner = p1.getSymbol() == Symbol.X.getValue() ? p1.getName() : p2.getName();
             return true;
         }
 
         if (match(positionsO)) {
-            winner = p1.getSymbol() == Cell.SYMBOLS[2] ? p1.getName() : p2.getName();
+            winner = p1.getSymbol() == Symbol.O.getValue() ? p1.getName() : p2.getName();
             return true;
         }
         return false;

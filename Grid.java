@@ -52,7 +52,7 @@ public class Grid {
         if (cell == null) {
             throw new RuntimeException("Object is null");
         }
-        if (value != Cell.SYMBOLS[1] && value != Cell.SYMBOLS[2]){
+        if (!Symbol.isInEnum(value)){
             throw new RuntimeException("Incorrect value");
         }
         for (int k = 0; k < this.cells.size(); k++) {
