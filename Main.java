@@ -1,4 +1,3 @@
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -7,8 +6,8 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static Boolean START = true;
-    public final static String[][] COMBINATIONS = {
+    private static Boolean START = true;
+    private final static String[][] COMBINATIONS = {
             { "00", "01", "02" }, // row 1
             { "10", "11", "12" }, // row 2
             { "20", "21", "22" }, // row 3
@@ -19,7 +18,7 @@ public class Main {
             { "02", "11", "20" }, // diag 2
     };
 
-    public static String winner = "";
+    private static String winner = "";
 
     public static void startFirst(Player p1, Player p2) {
         if (Math.random() < 0.5)
@@ -48,42 +47,71 @@ public class Main {
 
     }
 
+    private static void printGridModel() {
+        StringBuilder builder = new StringBuilder();
+        builder
+        .append(" 00 | ")
+        .append("01 | ")
+        .append("02\n")
+        .append("---- ".repeat(3))
+        .append("\n")
+        .append(" 10 | ")
+        .append("11 | ")
+        .append("12\n")
+        .append("---- ".repeat(3))
+        .append("\n")
+        .append(" 20 | ")
+        .append("21 | ")
+        .append("22\n");
+        System.out.println(builder.toString());
+    }
+
+    private static String getPlayerName(Player p1, Player p2) {
+        return p1.isPlaying() ? p1.getName() : p2.getName();
+    }
+    
+    private static char getPlayerSymbol(Player p1, Player p2) {
+        return p1.isPlaying() ? p1.getSymbol() : p2.getSymbol();
+    }
+
     public static void playPVP(Grid grid, Player p1, Player p2) {
         startFirst(p1, p2);
+        printGridModel();
         Scanner sc = new Scanner(System.in);
+    
         while (START) {
 
-            System.out.println(
-                    "--- Grid model ---\n\n" +
-                            " 00 | " +
-                            "01 | " +
-                            "02\n" + "--- ".repeat(3) + "\n" +
-                            " 10 | " +
-                            "11 | " +
-                            "12\n" + "--- ".repeat(3) + "\n" +
-                            " 20 | " +
-                            "21 | " +
-                            "22\n");
-            System.out.println("--- Grid ---\n\n" + grid + "\n");
-            String name = p1.isPlaying() ? p1.getName() : p2.getName();
-            char symbol = p1.isPlaying() ? p1.getSymbol() : p2.getSymbol();
+
+            String name = getPlayerName(p1, p2);
+            char symbol = getPlayerSymbol(p1, p2);
+
             System.out.println(name + " (" + symbol + ") is playing.");
             System.out.println("Type Quit to quit.");
-            System.out.print("Pick one case by typing its corresponding character : ");
-
-            saveInput(grid, sc.next(), symbol);
+            System.out.print("Pick one case by typing its corresponding character: ");
+    
+            String input = sc.next();
+            if ("Quit".equalsIgnoreCase(input)) {
+                break;
+            }
+    
+            saveInput(grid, input, symbol);
+            System.out.println("--- Grid ---\n\n" + grid + "\n");
             switchTurn(p1, p2);
             end(grid, p1, p2);
         }
+    
         sc.close();
     }
 
     public static void playIAvsIA(Grid grid) {
+
         IA ia_1 = new IA("BOT1", 'X');
         IA ia_2 = new IA("BOT2", 'O');
+
         ArrayList<String> moves = new ArrayList<>(Arrays.asList("00", "01", "02", "10", "11", "12", "20", "21", "22"));
         startFirst(ia_1, ia_2);
-        System.out.println("--- Grid ---\n\n" + grid + "\n");
+
+        printGridModel();
 
         while (START) {
 
@@ -97,17 +125,21 @@ public class Main {
             char symbol = '\0';
 
             if (ia_1.isPlaying()) {
+
                 System.out.println(ia_1.getName() + " (" + ia_1.getSymbol() + ") is playing.");
                 symbol = ia_1.getSymbol();
                 choice = ia_1.randomMove(moves);
                 moves.remove(choice);
                 System.out.println(ia_1.getName() + " has picked : " + choice);
+
             } else {
+
                 System.out.println(ia_2.getName() + " (" + ia_2.getSymbol() + ") is playing.");
                 symbol = ia_2.getSymbol();
                 choice = ia_2.randomMove(moves);
                 moves.remove(choice);
                 System.out.println(ia_2.getName() + " has picked : " + choice);
+
             }
 
             saveInput(grid, choice, symbol);
@@ -119,9 +151,11 @@ public class Main {
 
     public static void playPlayerVsIA(Grid grid, Player p) {
         IA ia = new IA("BOT", p.getSymbol() == 'X' ? 'O': 'X');
-        startFirst(p, ia);
         ArrayList<String> moves = new ArrayList<>(Arrays.asList("00", "01", "02", "10", "11", "12", "20", "21", "22"));
-        System.out.println("--- Grid ---\n\n" + grid + "\n");
+
+        startFirst(p, ia);
+        printGridModel();
+
         Scanner sc = new Scanner(System.in);
 
         while (START) {
@@ -136,18 +170,22 @@ public class Main {
             }
 
             if (p.isPlaying()) {
+
                 System.out.println(p.getName() + " (" + p.getSymbol() + ") is playing.");
                 symbol = p.getSymbol();
                 System.out.print("Make your choice : ");
                 choice = sc.next();
                 moves.remove(choice);
                 System.out.println(p.getName() + " has picked : " + choice);
+
             } else {
+
                 System.out.println(ia.getName() + " (" + ia.getSymbol() + ") is playing.");
                 symbol = ia.getSymbol();
                 choice = ia.randomMove(moves);
                 moves.remove(choice);
                 System.out.println(ia.getName() + " has picked : " + choice);
+
             }
 
             saveInput(grid, choice, symbol);
@@ -166,28 +204,31 @@ public class Main {
             p2.changeState();
             p1.changeState();
         }
+    }
 
+    public static String endGameMessage() {
+        if (winner.length() == 0) return "Draw !";
+        return "We have a winner ! It's " + winner + " !";
     }
 
     public static void end(Grid grid, Player p1, Player p2) {
         if (isWin(grid, p1, p2)) {
             START = false;
-            System.out.println("Result :\n" + grid);
-            System.out.println("The winner is : " + winner.toUpperCase());
+            System.out.println(endGameMessage());
         } else if (isDraw(grid, p1, p2)) {
             START = false;
-            System.out.println("Result :\n" + grid);
-            System.out.println("DRAW");
+            System.out.println(endGameMessage());
         }
     }
 
-    public static Boolean match(ArrayList<String> list) {
+    private static Boolean match(ArrayList<String> list) {
         if (list.size() > 2) {
             Collections.sort(list);
-            for (String[] row : COMBINATIONS) {
-                List<String> rowList = Arrays.asList(row);
-                if (list.containsAll(rowList))
+            for (String[] combination : COMBINATIONS) {
+                List<String> combinationList = Arrays.asList(combination);
+                if (list.containsAll(combinationList)) {
                     return true;
+                }
             }
         }
         return false;
@@ -228,27 +269,23 @@ public class Main {
     public static void chooseModeAndPlay(Grid grid, Player p1, Player p2) {
         Scanner sc = new Scanner(System.in);
         System.out.println("Choose a mode:");
-        System.out.println("\t1. IA vs IA");
-        System.out.println("\t2. Player vs Player");
-        System.out.println("\t3. Player vs IA");
-
-        switch (sc.nextInt()) {
-            case 1:
-                playIAvsIA(grid);
-                break;
-
-            case 2:
-                playPVP(grid, p1, p2);
-                break;
-
-            case 3:
-                playPlayerVsIA(grid, p1);
-                break;
-
-            default:
-                break;
+        System.out.println("  1. IA vs IA");
+        System.out.println("  2. Player vs Player");
+        System.out.println("  3. Player vs IA");
+        System.out.println("  4. Quit");
+    
+        int mode = sc.nextInt();
+    
+        if (mode == 1) {
+            playIAvsIA(grid);
+        } else if (mode == 2) {
+            playPVP(grid, p1, p2);
+        } else if (mode == 3) {
+            playPlayerVsIA(grid, p1);
+        } else {
+            System.exit(1);
         }
-
+    
         sc.close();
     }
 
@@ -257,7 +294,7 @@ public class Main {
         Player p1 = new Player("Player 1", 'X');
         Player p2 = new Player("Player 2", 'O');
 
-        Main.chooseModeAndPlay(grid, p1, p2);
+        chooseModeAndPlay(grid, p1, p2);
     }
 
 }

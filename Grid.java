@@ -68,10 +68,7 @@ public class Grid {
         }
     }
 
-    /**
-     * Returns Grid representation as String
-     * @return String displayed value when printing Grid object
-     */
+    @Override
     public String toString() {
         String output = "";
         for (int i = 0; i < this.cells.size(); i++) {
