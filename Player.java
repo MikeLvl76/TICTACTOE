@@ -1,9 +1,13 @@
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Player {
     
-    private String name;
-    private char symbol;
-    private Boolean play;
+    protected String name;
+    protected char symbol;
+    protected Boolean play;
+    protected String currentMove;
+    protected ArrayList<String> moves;
 
     /**
      * Player constructor that needs String and char values for name and symbol attributes
@@ -17,6 +21,8 @@ public class Player {
         this.name = _n;
         this.symbol = _s;
         this.play = false;
+        this.currentMove = "";
+        this.moves = new ArrayList<>(Arrays.asList("00", "01", "02", "10", "11", "12", "20", "21", "22"));
     }
 
     /**
@@ -43,6 +49,14 @@ public class Player {
         return this.play;
     }
 
+    public String getCurrentMove(){
+        return this.currentMove;
+    }
+
+    public ArrayList<String> getMoves(){
+        return this.moves;
+    }
+
     /**
      * Change Player's name
      * @param new_name String value to insert for updating name attribute
@@ -62,6 +76,16 @@ public class Player {
         this.symbol = new_symbol;
     }
 
+    public void deleteMove(String move) {
+        this.moves.remove(move);
+    }
+
+    public void saveMove(String move){
+        if (!this.moves.contains(move)) return;
+        this.currentMove = move;
+        this.deleteMove(move);
+    }
+
     /**
      * Change Player status : if he's playing then it will not be playing anymore and vice-versa
      */
@@ -70,10 +94,7 @@ public class Player {
         else this.play = true;
     }
 
-    /**
-     * Returns Player representation as String
-     * @return String displayed value when printing Player object
-     */
+    @Override
     public String toString(){
         return (this.play ? "[Playing] " : "[Idle] ") + this.name.toUpperCase() + " : " + this.symbol;
     }

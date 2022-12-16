@@ -27,10 +27,9 @@ public class Main {
             p2.changeState();
     }
 
-    public static void saveInput(Grid grid, String picked, char symbol) {
+    public static void saveInput(Grid grid, Player player) {
 
-        if (picked.equals("Quit"))
-            System.exit(0);
+        String picked = player.getCurrentMove();
 
         int i = Integer.parseInt(Character.toString(picked.charAt(0)));
         int j = Integer.parseInt(Character.toString(picked.charAt(1)));
@@ -41,7 +40,7 @@ public class Main {
             System.out.println("Negative indices not supported !");
         } else {
             Cell cell = grid.getCellByCoords(i, j);
-            grid.updateCellValue(cell, symbol);
+            grid.updateCellValue(cell, player.getSymbol());
             return;
         }
 
@@ -50,66 +49,64 @@ public class Main {
     private static void printGridModel() {
         StringBuilder builder = new StringBuilder();
         builder
-        .append(" 00 | ")
-        .append("01 | ")
-        .append("02\n")
-        .append("---- ".repeat(3))
-        .append("\n")
-        .append(" 10 | ")
-        .append("11 | ")
-        .append("12\n")
-        .append("---- ".repeat(3))
-        .append("\n")
-        .append(" 20 | ")
-        .append("21 | ")
-        .append("22\n");
+                .append(" 00 | ")
+                .append("01 | ")
+                .append("02\n")
+                .append("---- ".repeat(3))
+                .append("\n")
+                .append(" 10 | ")
+                .append("11 | ")
+                .append("12\n")
+                .append("---- ".repeat(3))
+                .append("\n")
+                .append(" 20 | ")
+                .append("21 | ")
+                .append("22\n");
         System.out.println(builder.toString());
     }
 
-    private static String getPlayerName(Player p1, Player p2) {
-        return p1.isPlaying() ? p1.getName() : p2.getName();
-    }
-    
-    private static char getPlayerSymbol(Player p1, Player p2) {
-        return p1.isPlaying() ? p1.getSymbol() : p2.getSymbol();
+    private static String getPlayerInfo(Player p) {
+        return p.getSymbol() + " | " + p.getName() + " : " + (p.isPlaying() ? "PLAYING" : "IDLE");
     }
 
     public static void playPVP(Grid grid, Player p1, Player p2) {
         startFirst(p1, p2);
         printGridModel();
         Scanner sc = new Scanner(System.in);
-    
+
         while (START) {
 
+            Player p = p1.isPlaying() ? p1 : p2;
+            System.out.println(getPlayerInfo(p));
 
-            String name = getPlayerName(p1, p2);
-            char symbol = getPlayerSymbol(p1, p2);
-
-            System.out.println(name + " (" + symbol + ") is playing.");
-            System.out.println("Type Quit to quit.");
-            System.out.print("Pick one case by typing its corresponding character: ");
-    
+            System.out.println("Possible moves : " + p.getMoves().toString());
+            System.out.print("Pick one case by typing its location (type Quit to quit) : ");
             String input = sc.next();
             if ("Quit".equalsIgnoreCase(input)) {
                 break;
             }
-    
-            saveInput(grid, input, symbol);
+
+            p.saveMove(input);
+            if (p1.isPlaying())
+                p2.deleteMove(p.getCurrentMove());
+            else
+                p1.deleteMove(p.getCurrentMove());
+
+            saveInput(grid, p);
             System.out.println("--- Grid ---\n\n" + grid + "\n");
             switchTurn(p1, p2);
             end(grid, p1, p2);
         }
-    
+
         sc.close();
     }
 
     public static void playIAvsIA(Grid grid) {
 
-        IA ia_1 = new IA("BOT1", 'X');
-        IA ia_2 = new IA("BOT2", 'O');
+        IA p1 = new IA("BOT1", 'X');
+        IA p2 = new IA("BOT2", 'O');
 
-        ArrayList<String> moves = new ArrayList<>(Arrays.asList("00", "01", "02", "10", "11", "12", "20", "21", "22"));
-        startFirst(ia_1, ia_2);
+        startFirst(p1, p2);
 
         printGridModel();
 
@@ -121,37 +118,26 @@ public class Main {
                 e.printStackTrace();
             }
 
-            String choice = "";
-            char symbol = '\0';
+            IA p = p1.isPlaying() ? p1 : p2;
+            System.out.println(getPlayerInfo(p));
+            System.out.println("Possible moves : " + p.getMoves().toString());
 
-            if (ia_1.isPlaying()) {
+            p.randomMove(p.getMoves());
+            System.out.println("Chosen move : " + p.getCurrentMove());
+            if (p1.isPlaying())
+                p2.deleteMove(p.getCurrentMove());
+            else
+                p1.deleteMove(p.getCurrentMove());
 
-                System.out.println(ia_1.getName() + " (" + ia_1.getSymbol() + ") is playing.");
-                symbol = ia_1.getSymbol();
-                choice = ia_1.randomMove(moves);
-                moves.remove(choice);
-                System.out.println(ia_1.getName() + " has picked : " + choice);
-
-            } else {
-
-                System.out.println(ia_2.getName() + " (" + ia_2.getSymbol() + ") is playing.");
-                symbol = ia_2.getSymbol();
-                choice = ia_2.randomMove(moves);
-                moves.remove(choice);
-                System.out.println(ia_2.getName() + " has picked : " + choice);
-
-            }
-
-            saveInput(grid, choice, symbol);
+            saveInput(grid, p);
             System.out.println("--- Grid ---\n\n" + grid + "\n");
-            switchTurn(ia_1, ia_2);
-            end(grid, ia_1, ia_2);
+            switchTurn(p1, p2);
+            end(grid, p1, p2);
         }
     }
 
     public static void playPlayerVsIA(Grid grid, Player p) {
-        IA ia = new IA("BOT", p.getSymbol() == 'X' ? 'O': 'X');
-        ArrayList<String> moves = new ArrayList<>(Arrays.asList("00", "01", "02", "10", "11", "12", "20", "21", "22"));
+        IA ia = new IA("BOT", p.getSymbol() == 'X' ? 'O' : 'X');
 
         startFirst(p, ia);
         printGridModel();
@@ -159,9 +145,6 @@ public class Main {
         Scanner sc = new Scanner(System.in);
 
         while (START) {
-
-            String choice = "";
-            char symbol = '\0';
 
             try {
                 Thread.sleep(2000);
@@ -171,24 +154,30 @@ public class Main {
 
             if (p.isPlaying()) {
 
-                System.out.println(p.getName() + " (" + p.getSymbol() + ") is playing.");
-                symbol = p.getSymbol();
-                System.out.print("Make your choice : ");
-                choice = sc.next();
-                moves.remove(choice);
-                System.out.println(p.getName() + " has picked : " + choice);
+                System.out.println(getPlayerInfo(p));
+                System.out.println("Possible moves : " + p.getMoves().toString());
+                System.out.print("Pick one case by typing its location (type Quit to quit) : ");
+                String input = sc.next();
+                if ("Quit".equalsIgnoreCase(input)) {
+                    break;
+                }
+
+                p.saveMove(input);
+                ia.deleteMove(p.getCurrentMove());
+                saveInput(grid, p);
 
             } else {
 
-                System.out.println(ia.getName() + " (" + ia.getSymbol() + ") is playing.");
-                symbol = ia.getSymbol();
-                choice = ia.randomMove(moves);
-                moves.remove(choice);
-                System.out.println(ia.getName() + " has picked : " + choice);
+                System.out.println(getPlayerInfo(ia));
+                System.out.println("Possible moves : " + ia.getMoves().toString());
+
+                ia.randomMove(ia.getMoves());
+                System.out.println("Chosen move : " + ia.getCurrentMove());
+                p.deleteMove(ia.getCurrentMove());
+                saveInput(grid, ia);
 
             }
 
-            saveInput(grid, choice, symbol);
             System.out.println("--- Grid ---\n\n" + grid + "\n");
             switchTurn(p, ia);
             end(grid, p, ia);
@@ -207,7 +196,8 @@ public class Main {
     }
 
     public static String endGameMessage() {
-        if (winner.length() == 0) return "Draw !";
+        if (winner.length() == 0)
+            return "Draw !";
         return "We have a winner ! It's " + winner + " !";
     }
 
@@ -273,9 +263,9 @@ public class Main {
         System.out.println("  2. Player vs Player");
         System.out.println("  3. Player vs IA");
         System.out.println("  4. Quit");
-    
+
         int mode = sc.nextInt();
-    
+
         if (mode == 1) {
             playIAvsIA(grid);
         } else if (mode == 2) {
@@ -285,7 +275,7 @@ public class Main {
         } else {
             System.exit(1);
         }
-    
+
         sc.close();
     }
 

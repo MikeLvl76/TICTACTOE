@@ -7,8 +7,8 @@ public class IA extends Player{
         super(_n, _s);
     }
 
-    public String randomMove(ArrayList<String> moves) {
-        return moves.get(new Random().nextInt(moves.size()));
+    public void randomMove(ArrayList<String> moves) {
+        this.saveMove(moves.get(new Random().nextInt(moves.size())));
     }
     
 }

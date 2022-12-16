@@ -70,10 +70,7 @@ public class Cell {
         else this.empty = true;
     }
 
-    /**
-     * Returns Cell representation as String
-     * @return String displayed value when printing Cell object
-     */
+    @Override
     public String toString(){
         return "" + this.value;
     }
