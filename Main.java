@@ -106,6 +106,14 @@ public class Main {
         IA p1 = new IA("BOT1", 'X');
         IA p2 = new IA("BOT2", 'O');
 
+        Boolean playRandom = true;
+
+        if (Math.random() <= 0.5) {
+            playRandom = false;
+        }
+
+        List<String> previousMove = new ArrayList<>();
+
         startFirst(p1, p2);
 
         printGridModel();
@@ -122,7 +130,10 @@ public class Main {
             System.out.println(getPlayerInfo(p));
             System.out.println("Possible moves : " + p.getMoves().toString());
 
-            p.randomMove();
+            if (playRandom) p.randomMove();
+            else p.oppositeMove(grid, previousMove.get(previousMove.size() - 1));
+
+            previousMove.add(p.getCurrentMove());
             System.out.println("Chosen move : " + p.getCurrentMove());
             if (p1.isPlaying())
                 p2.deleteMove(p.getCurrentMove());

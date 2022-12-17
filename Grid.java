@@ -21,6 +21,7 @@ public class Grid {
 
     /**
      * Returns list of Cell
+     * 
      * @return ArrayList<Cell> a list containing Cell object
      */
     public ArrayList<Cell> getCells() {
@@ -29,6 +30,7 @@ public class Grid {
 
     /**
      * Returns Cell at given coordinates
+     * 
      * @param i row index
      * @param j column index
      * @return Cell object at the given indices
@@ -45,14 +47,15 @@ public class Grid {
 
     /**
      * Updates Cell object value
-     * @param cell Cell object to be updated
+     * 
+     * @param cell  Cell object to be updated
      * @param value char value to insert
      */
-    public void updateCellValue(Cell cell, char value){
+    public void updateCellValue(Cell cell, char value) {
         if (cell == null) {
             throw new RuntimeException("Object is null");
         }
-        if (!Symbol.isInEnum(value)){
+        if (!Symbol.isInEnum(value)) {
             throw new RuntimeException("Incorrect value");
         }
         for (int k = 0; k < this.cells.size(); k++) {
@@ -70,12 +73,15 @@ public class Grid {
 
     @Override
     public String toString() {
+
         StringBuilder builder = new StringBuilder();
+
         for (int i = 0; i < this.cells.size(); i++) {
-            if (i % 3 == 0 && i > 0){
+            if (i % 3 == 0 && i > 0) {
                 builder.append("\n").append("--- ".repeat(3)).append("\n");
             }
-            builder.append((i % 3 == 0 ? " " : "")).append(this.cells.get(i)).append((i != 2 && i != 5 && i != 8  ? " | " : ""));
+            builder.append((i % 3 == 0 ? " " : "")).append(this.cells.get(i))
+                    .append((i != 2 && i != 5 && i != 8 ? " | " : ""));
         }
         return builder.toString();
     }
