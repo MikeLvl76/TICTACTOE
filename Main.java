@@ -101,16 +101,28 @@ public class Main {
         sc.close();
     }
 
+    private static void AIAction(AI ai, Grid g, String move) {
+        double rand = Math.random();
+
+        if (rand <= 0.25) {
+            System.out.println("Stategy : complete the row");
+            ai.completeRow(g, move);
+        } else if (rand > 0.25 && rand <= 0.5) {
+            System.out.println("Stategy : complete the column");
+            ai.completeCol(g, move);
+        } else if (rand > 0.5 && rand <= 0.75) {
+            System.out.println("Stategy : playing at the opposite");
+            ai.oppositeMove(g, move);
+        } else {
+            System.out.println("Stategy : playing randomly");
+            ai.randomMove();
+        }
+    }
+
     public static void playIAvsIA(Grid grid) {
 
-        IA p1 = new IA("BOT1", 'X');
-        IA p2 = new IA("BOT2", 'O');
-
-        Boolean playRandom = true;
-
-        if (Math.random() <= 0.5) {
-            playRandom = false;
-        }
+        AI p1 = new AI("BOT1", 'X');
+        AI p2 = new AI("BOT2", 'O');
 
         List<String> previousMove = new ArrayList<>();
 
@@ -126,12 +138,11 @@ public class Main {
                 e.printStackTrace();
             }
 
-            IA p = p1.isPlaying() ? p1 : p2;
+            AI p = p1.isPlaying() ? p1 : p2;
             System.out.println(getPlayerInfo(p));
             System.out.println("Possible moves : " + p.getMoves().toString());
 
-            if (playRandom) p.randomMove();
-            else p.oppositeMove(grid, previousMove.get(previousMove.size() - 1));
+            AIAction(p, grid, p.getCurrentMove());
 
             previousMove.add(p.getCurrentMove());
             System.out.println("Chosen move : " + p.getCurrentMove());
@@ -148,9 +159,9 @@ public class Main {
     }
 
     public static void playPlayerVsIA(Grid grid, Player p) {
-        IA ia = new IA("BOT", p.getSymbol() == 'X' ? 'O' : 'X');
+        AI ai = new AI("BOT", p.getSymbol() == 'X' ? 'O' : 'X');
 
-        startFirst(p, ia);
+        startFirst(p, ai);
         printGridModel();
 
         Scanner sc = new Scanner(System.in);
@@ -174,24 +185,24 @@ public class Main {
                 }
 
                 p.saveMove(input);
-                ia.deleteMove(p.getCurrentMove());
+                ai.deleteMove(p.getCurrentMove());
                 saveInput(grid, p);
 
             } else {
 
-                System.out.println(getPlayerInfo(ia));
-                System.out.println("Possible moves : " + ia.getMoves().toString());
+                System.out.println(getPlayerInfo(ai));
+                System.out.println("Possible moves : " + ai.getMoves().toString());
 
-                ia.randomMove();
-                System.out.println("Chosen move : " + ia.getCurrentMove());
-                p.deleteMove(ia.getCurrentMove());
-                saveInput(grid, ia);
+                ai.randomMove();
+                System.out.println("Chosen move : " + ai.getCurrentMove());
+                p.deleteMove(ai.getCurrentMove());
+                saveInput(grid, ai);
 
             }
 
             System.out.println("--- Grid ---\n\n" + grid + "\n");
-            switchTurn(p, ia);
-            end(grid, p, ia);
+            switchTurn(p, ai);
+            end(grid, p, ai);
         }
         sc.close();
     }
@@ -270,9 +281,9 @@ public class Main {
     public static void chooseModeAndPlay(Grid grid, Player p1, Player p2) {
         Scanner sc = new Scanner(System.in);
         System.out.println("Choose a mode:");
-        System.out.println("  1. IA vs IA");
+        System.out.println("  1. AI vs AI");
         System.out.println("  2. Player vs Player");
-        System.out.println("  3. Player vs IA");
+        System.out.println("  3. Player vs AI");
         System.out.println("  4. Quit");
 
         int mode = sc.nextInt();
