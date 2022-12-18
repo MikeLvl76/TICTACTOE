@@ -1,3 +1,4 @@
+package game.src.main.java.tictactoe;
 public enum Symbol {
 
     WHITESPACE(' '),

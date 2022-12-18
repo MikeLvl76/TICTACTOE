@@ -2,18 +2,31 @@
 
 A simple Tic-Tac-Toe game using CLI written in Java. The code can be improved and features can be implemented further.
 
-You can type commands to compile and launch :
+This project is generated with [Maven](https://maven.apache.org/guides/getting-started/maven-in-five-minutes.html) because it's relevant if you want to include extern dependency.
 
-```
-javac *.java
-java Main
+**In command prompt go to `game` directory and type these commandes to run the project :**
+
+- 1. Compile the project
+
+```sh
+mvn compile
 ```
 
-Or use an IDE to avoid typing those.
+- 2. Create the .jar
+
+```sh
+mvn package
+```
+
+- 3. Add .jar to classpath and launch Main.java file
+
+```sh
+java -cp target/game-1.0-SNAPSHOT.jar game.src.main.java.tictactoe.Main
+```
 
 There are 3 modes :
 - Player vs Player
-- IA vs IA
-- Player vs IA
+- AI vs AI
+- Player vs AI
 
-When IA has to play there is no learning and it's a basic random choice. It will be improved soon.
+AI has multiple behaviors but they appear randomly and if IA can also play randomly.

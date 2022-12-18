@@ -1,3 +1,4 @@
+package game.src.main.java.tictactoe;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -39,8 +40,7 @@ public class Main {
         } else if (i < 0 || j < 0) {
             System.out.println("Negative indices not supported !");
         } else {
-            Cell cell = grid.getCellByCoords(i, j);
-            grid.updateCellValue(cell, player.getSymbol());
+            grid.updateCellValue(grid.getCellByCoords(i, j), player.getSymbol());
             return;
         }
 
@@ -66,34 +66,45 @@ public class Main {
     }
 
     private static String getPlayerInfo(Player p) {
-        return p.getSymbol() + " | " + p.getName() + " : " + (p.isPlaying() ? "PLAYING" : "IDLE");
+        return p.getSymbol() + " | " + p.getName() + " : Playing";
     }
 
     public static void playPVP(Grid grid, Player p1, Player p2) {
+
+        // Determine which player starts at first
         startFirst(p1, p2);
+
         printGridModel();
+
         Scanner sc = new Scanner(System.in);
 
         while (START) {
 
-            Player p = p1.isPlaying() ? p1 : p2;
-            System.out.println(getPlayerInfo(p));
+            // Determine which player's turn it is
+            Player currentPlayer = p1.isPlaying() ? p1 : p2;
+            System.out.println(getPlayerInfo(currentPlayer));
 
-            System.out.println("Possible moves : " + p.getMoves().toString());
+
+            // Allow player to type location or Quit and save his move
+            System.out.println("Possible moves : " + currentPlayer.getMoves().toString());
             System.out.print("Pick one case by typing its location (type Quit to quit) : ");
             String input = sc.next();
             if ("Quit".equalsIgnoreCase(input)) {
                 break;
             }
+            currentPlayer.saveMove(input);
 
-            p.saveMove(input);
+            // Remove the move from the other player's list of possible moves
             if (p1.isPlaying())
-                p2.deleteMove(p.getCurrentMove());
+                p2.deleteMove(currentPlayer.getCurrentMove());
             else
-                p1.deleteMove(p.getCurrentMove());
+                p1.deleteMove(currentPlayer.getCurrentMove());
 
-            saveInput(grid, p);
+            // Save input and display the grid
+            saveInput(grid, currentPlayer);
             System.out.println("--- Grid ---\n\n" + grid + "\n");
+
+            // Switch turn and check if game is over
             switchTurn(p1, p2);
             end(grid, p1, p2);
         }
@@ -124,35 +135,40 @@ public class Main {
         AI p1 = new AI("BOT1", 'X');
         AI p2 = new AI("BOT2", 'O');
 
-        List<String> previousMove = new ArrayList<>();
-
+        // Determine which player starts at first
         startFirst(p1, p2);
 
         printGridModel();
 
         while (START) {
 
+            // Sleep for 2 seconds
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
-            AI p = p1.isPlaying() ? p1 : p2;
-            System.out.println(getPlayerInfo(p));
-            System.out.println("Possible moves : " + p.getMoves().toString());
+            // Determine which player's turn it is
+            AI currentPlayer = p1.isPlaying() ? p1 : p2;
+            System.out.println(getPlayerInfo(currentPlayer));
+            System.out.println("Possible moves : " + currentPlayer.getMoves().toString());
 
-            AIAction(p, grid, p.getCurrentMove());
+            // Have the AI make a move
+            AIAction(currentPlayer, grid, currentPlayer.getCurrentMove());
 
-            previousMove.add(p.getCurrentMove());
-            System.out.println("Chosen move : " + p.getCurrentMove());
+            // Remove the move from the other player's list of possible moves
+            System.out.println("Chosen move : " + currentPlayer.getCurrentMove());
             if (p1.isPlaying())
-                p2.deleteMove(p.getCurrentMove());
+                p2.deleteMove(currentPlayer.getCurrentMove());
             else
-                p1.deleteMove(p.getCurrentMove());
+                p1.deleteMove(currentPlayer.getCurrentMove());
 
-            saveInput(grid, p);
+            // Save the move and print the updated grid
+            saveInput(grid, currentPlayer);
             System.out.println("--- Grid ---\n\n" + grid + "\n");
+
+            // Switch turns and check if the game is over
             switchTurn(p1, p2);
             end(grid, p1, p2);
         }
@@ -161,13 +177,15 @@ public class Main {
     public static void playPlayerVsIA(Grid grid, Player p) {
         AI ai = new AI("BOT", p.getSymbol() == 'X' ? 'O' : 'X');
 
+        // Determine which player starts at first
         startFirst(p, ai);
+
         printGridModel();
 
         Scanner sc = new Scanner(System.in);
 
         while (START) {
-
+            // Sleep for 2 seconds
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
@@ -175,7 +193,7 @@ public class Main {
             }
 
             if (p.isPlaying()) {
-
+                // Player's turn
                 System.out.println(getPlayerInfo(p));
                 System.out.println("Possible moves : " + p.getMoves().toString());
                 System.out.print("Pick one case by typing its location (type Quit to quit) : ");
@@ -189,17 +207,18 @@ public class Main {
                 saveInput(grid, p);
 
             } else {
-
+                // AI's turn
                 System.out.println(getPlayerInfo(ai));
                 System.out.println("Possible moves : " + ai.getMoves().toString());
 
-                ai.randomMove();
+                AIAction(ai, grid, p.getCurrentMove());
                 System.out.println("Chosen move : " + ai.getCurrentMove());
                 p.deleteMove(ai.getCurrentMove());
                 saveInput(grid, ai);
 
             }
 
+            // Print the updated grid and switch turns
             System.out.println("--- Grid ---\n\n" + grid + "\n");
             switchTurn(p, ai);
             end(grid, p, ai);
