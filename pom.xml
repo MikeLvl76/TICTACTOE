@@ -27,11 +27,6 @@
       <scope>test</scope>
     </dependency>
 
-    <dependency>
-      <groupId>com.opencsv</groupId>
-      <artifactId>opencsv</artifactId>
-      <version>LATEST</version>
-    </dependency>
   </dependencies>
 
   <build>

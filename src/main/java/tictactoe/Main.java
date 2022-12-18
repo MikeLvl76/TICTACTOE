@@ -1,7 +1,11 @@
 package tictactoe;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -19,7 +23,22 @@ public class Main {
             { "02", "11", "20" }, // diag 2
     };
 
-    private static String winner = "";
+    private static String winner = "", loser = "";
+    public static CSVWriter writer;
+    public static CSVReader reader;
+
+    public static void initWriter(String filepath, String... headerElements) {
+        writer = new CSVWriter(filepath);
+        try {
+            writer.write(headerElements);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void initReader(String filepath) {
+        reader = new CSVReader(filepath);
+    }
 
     public static void startFirst(Player p1, Player p2) {
         if (Math.random() < 0.5)
@@ -84,7 +103,6 @@ public class Main {
             Player currentPlayer = p1.isPlaying() ? p1 : p2;
             System.out.println(getPlayerInfo(currentPlayer));
 
-
             // Allow player to type location or Quit and save his move
             System.out.println("Possible moves : " + currentPlayer.getMoves().toString());
             System.out.print("Pick one case by typing its location (type Quit to quit) : ");
@@ -113,6 +131,12 @@ public class Main {
     }
 
     private static void AIAction(AI ai, Grid g, String move) {
+
+        if (move.length() == 0) {
+            ai.randomMove();
+            return;
+        }
+
         double rand = Math.random();
 
         if (rand <= 0.25) {
@@ -130,7 +154,7 @@ public class Main {
         }
     }
 
-    public static void playIAvsIA(Grid grid) {
+    public static void playAIvsAI(Grid grid) {
 
         AI p1 = new AI("BOT1", 'X');
         AI p2 = new AI("BOT2", 'O');
@@ -236,19 +260,33 @@ public class Main {
         }
     }
 
-    public static String endGameMessage() {
-        if (winner.length() == 0)
+    // "Player", "Opponent", "Winner", "Loser", "isDraw", "Date"
+    public static String endGameMessage(Player p1, Player p2) {
+        if (winner.length() == 0) {
+            String[] row = { p1.getName(), p2.getName(), "Nobody", "Nobody", "Yes", new Date().toString() };
+            try {
+                writer.append(row);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             return "Draw !";
+        }
+        String[] row = { p1.getName(), p2.getName(), winner, loser, "No", new Date().toString() };
+        try {
+            writer.append(row);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return "We have a winner ! It's " + winner + " !";
     }
 
     public static void end(Grid grid, Player p1, Player p2) {
         if (isWin(grid, p1, p2)) {
             START = false;
-            System.out.println(endGameMessage());
+            System.out.println(endGameMessage(p1, p2));
         } else if (isDraw(grid, p1, p2)) {
             START = false;
-            System.out.println(endGameMessage());
+            System.out.println(endGameMessage(p1, p2));
         }
     }
 
@@ -287,11 +325,13 @@ public class Main {
         }
         if (match(positionsX)) {
             winner = p1.getSymbol() == Symbol.X.getValue() ? p1.getName() : p2.getName();
+            loser = p1.getSymbol() != Symbol.X.getValue() ? p1.getName() : p2.getName();
             return true;
         }
 
         if (match(positionsO)) {
             winner = p1.getSymbol() == Symbol.O.getValue() ? p1.getName() : p2.getName();
+            loser = p1.getSymbol() != Symbol.O.getValue() ? p1.getName() : p2.getName();
             return true;
         }
         return false;
@@ -308,7 +348,7 @@ public class Main {
         int mode = sc.nextInt();
 
         if (mode == 1) {
-            playIAvsIA(grid);
+            playAIvsAI(grid);
         } else if (mode == 2) {
             playPVP(grid, p1, p2);
         } else if (mode == 3) {
@@ -321,6 +361,10 @@ public class Main {
     }
 
     public static void main(String[] args) {
+        String path = System.getProperty("user.dir") + File.separator + "src" + File.separator + "res" + File.separator
+                + "Results.csv";
+        initWriter(path, "Player", "Opponent", "Winner", "Loser", "isDraw", "Date");
+        initReader(path);
         Grid grid = new Grid();
         Player p1 = new Player("Player 1", 'X');
         Player p2 = new Player("Player 2", 'O');

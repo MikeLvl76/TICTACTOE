@@ -1,4 +1,4 @@
-package game.src.test.java.tictactoe;
+package tictactoe;
 
 import static org.junit.Assert.assertTrue;
 

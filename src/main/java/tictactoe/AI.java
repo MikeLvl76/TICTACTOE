@@ -32,7 +32,10 @@ public class AI extends Player {
         int col = loc.charAt(1) - '0';
 
         int nextRow = (row + 1) % 3;
-        int nextCol = row == 2 ? col + 1 : col;
+        int nextCol = row == 2 ? col : col + 1;
+
+        System.out.println(nextCol);
+        System.out.println(nextRow);
 
         if (g.getCellByCoords(nextRow, nextCol).isEmpty()) {
             this.saveMove(String.valueOf(nextRow) + String.valueOf(nextCol));
@@ -43,6 +46,7 @@ public class AI extends Player {
 
     public void completeRow(Grid g, String loc) {
 
+        System.out.println(loc);
         int col = loc.charAt(1) - '0';
 
         int nextRow = (col + 1) % 3;
