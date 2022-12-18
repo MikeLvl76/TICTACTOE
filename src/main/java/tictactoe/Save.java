@@ -1,4 +1,4 @@
-package game.src.main.java.tictactoe;
+package tictactoe;
 
 import java.io.File;
 import java.io.FileWriter;

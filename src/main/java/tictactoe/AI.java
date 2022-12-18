@@ -1,4 +1,4 @@
-package game.src.main.java.tictactoe;
+package tictactoe;
 import java.util.Random;
 
 public class AI extends Player {

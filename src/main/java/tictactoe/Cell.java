@@ -1,4 +1,4 @@
-package game.src.main.java.tictactoe;
+package tictactoe;
 
 public class Cell {
 
