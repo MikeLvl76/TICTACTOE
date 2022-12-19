@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
-public class Main {
+public class Main implements Save {
 
     private static Boolean START = true;
     private final static String[][] COMBINATIONS = {
@@ -24,21 +24,8 @@ public class Main {
     };
 
     private static String winner = "", loser = "";
-    public static CSVWriter writer;
-    public static CSVReader reader;
-
-    public static void initWriter(String filepath, String... headerElements) {
-        writer = new CSVWriter(filepath);
-        try {
-            writer.write(headerElements);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void initReader(String filepath) {
-        reader = new CSVReader(filepath);
-    }
+    public static String PATH = System.getProperty("user.dir") + File.separator + "src" + File.separator + "res" + File.separator
+                + "Results.csv";
 
     public static void startFirst(Player p1, Player p2) {
         if (Math.random() < 0.5)
@@ -265,7 +252,7 @@ public class Main {
         if (winner.length() == 0) {
             String[] row = { p1.getName(), p2.getName(), "Nobody", "Nobody", "Yes", new Date().toString() };
             try {
-                writer.append(row);
+                Save.append(PATH, row);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -273,7 +260,7 @@ public class Main {
         }
         String[] row = { p1.getName(), p2.getName(), winner, loser, "No", new Date().toString() };
         try {
-            writer.append(row);
+            Save.append(PATH, row);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -361,10 +348,12 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        String path = System.getProperty("user.dir") + File.separator + "src" + File.separator + "res" + File.separator
-                + "Results.csv";
-        initWriter(path, "Player", "Opponent", "Winner", "Loser", "isDraw", "Date");
-        initReader(path);
+        String[] header = {"Player", "Opponent", "Winner", "Loser", "isDraw", "Date"};
+        try {
+            if (Save.isEmpty(PATH)) Save.write(PATH, header);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         Grid grid = new Grid();
         Player p1 = new Player("Player 1", 'X');
         Player p2 = new Player("Player 2", 'O');

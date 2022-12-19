@@ -31,8 +31,8 @@ public class AI extends Player {
         int row = loc.charAt(0) - '0';
         int col = loc.charAt(1) - '0';
 
-        int nextRow = (row + 1) % 3;
-        int nextCol = row == 2 ? col : col + 1;
+        int nextRow = row == 2 ? 0 : row + 1;
+        int nextCol = row == 2 ? (col == 2 ? 0 : col + 1) : col;
 
         System.out.println(nextCol);
         System.out.println(nextRow);
@@ -49,7 +49,7 @@ public class AI extends Player {
         System.out.println(loc);
         int col = loc.charAt(1) - '0';
 
-        int nextRow = (col + 1) % 3;
+        int nextRow = col == 2 ? col : col + 1;
         int nextCol = col == 2 ? 0 : col + 1;
 
         if (g.getCellByCoords(nextRow, nextCol).isEmpty()) {
