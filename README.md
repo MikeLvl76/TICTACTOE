@@ -29,4 +29,4 @@ There are 3 modes :
 - AI vs AI
 - Player vs AI
 
-AI has multiple behaviors but they appear randomly and if IA can also play randomly.
+AI has multiple behaviors but they appear randomly.

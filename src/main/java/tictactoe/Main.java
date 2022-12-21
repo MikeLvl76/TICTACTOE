@@ -247,7 +247,6 @@ public class Main implements Save {
         }
     }
 
-    // "Player", "Opponent", "Winner", "Loser", "isDraw", "Date"
     public static String endGameMessage(Player p1, Player p2) {
         if (winner.length() == 0) {
             String[] row = { p1.getName(), p2.getName(), "Nobody", "Nobody", "Yes", new Date().toString() };
